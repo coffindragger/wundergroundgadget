@@ -1,0 +1,33 @@
+<html>
+    <head>
+        <style>
+            #holder {
+                width: 400px;
+                height: 300px;
+            }
+        </style>
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
+        <script src="js/raphael/raphael.js"></script>
+        <script src="js/jquery.wunderground.hourlygraph.js"></script>
+        <script>
+
+        window.zipcode = window.location.hash.replace('#','') || "44.081669,-123.064171";
+
+
+        $().ready(function() {
+
+            $('#gadget').WundergroundGadget({
+                api_key: '16b49f75b8c64b97',
+                zipcode: window.zipcode,
+                'num_hours': 24,
+            })
+
+        })
+        </script>
+    </head>
+
+
+    <body id="gadget">
+    </body>
+</html>
