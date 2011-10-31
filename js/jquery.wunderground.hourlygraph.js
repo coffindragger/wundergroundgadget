@@ -8,8 +8,8 @@
         init: function (config) {
             var options = {
                 'zipcode': 97401,
-                'width': 500,
-                'height': 500,
+                'width': 400,
+                'height': 300,
                 'num_hours': 36,
                 'api_key': "{key}",
             }
@@ -37,6 +37,7 @@
                             dew: [],
                             humidity: [],
                             snow: [],
+                            sky: [],
                         };
 
                         for (var i=0; i < obj.hourly_forecast.length; i++) {
@@ -52,6 +53,7 @@
                             forecast.dew.push(Number(hour.dewpoint.english));
                             forecast.humidity.push(Number(hour.humidity));
                             forecast.snow.push(Number(hour.snow.english));
+                            forecast.sky.push(Number(hour.sky));
                         }
                         forecast.min_temp -= forecast.min_temp % 5;
                         forecast.max_temp += 5-(forecast.max_temp % 5);
@@ -102,6 +104,10 @@
                     'stroke': "rgba(130,145,155,128)",
                     'fill': "rgba(130,145,155,64)",
                 }
+                var sky_attrs = {
+                    'stroke': "rgba(130,245,155,128)",
+                    'fill': "rgba(130,245,155,64)",
+                }
 
 
                 // temperature ticks
@@ -145,6 +151,21 @@
                 p.push("L"+x+","+(data.options.height - padding))
                 p.push("Z")
                 data.paper.path(p.join(" ")).attr(temp_attrs);
+
+
+                // cloudcover plot
+                y_unit = data.options.height / 100;
+                x = 20+padding;
+                y = data.options.height - padding;
+                p = ["M"+x+","+y];
+                for (i=0; i < data.options.num_hours; i += 1) {
+                    x = 20 + padding + i*x_unit;
+                    y = data.options.height - padding - data.forecast.sky[i]*y_unit;
+                    p.push("L"+x+","+y);
+                }
+                p.push("L"+x+","+(data.options.height - padding))
+                p.push("Z")
+                data.paper.path(p.join(" ")).attr(sky_attrs);
 
 
 
